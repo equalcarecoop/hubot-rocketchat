@@ -99,15 +99,29 @@ class RocketChatBotAdapter extends Adapter {
     user.room = meta.roomName || message.rid
 
     // Room joins, receive without further detail
-    if (['uj', 'au'].includes(message.t)) {
-      this.robot.logger.debug('Message type EnterMessage')
+    if ('uj' ===message.t) {
       return this.robot.receive(new EnterMessage(user, null, message._id))
+    }
+    if ('au' === message.t) {
+      this.robot.logger.debug('Message type EnterMessage', message)
+      const joiningUser = this.robot.brain.userForUsername(message.msg);
+      joiningUser.roomID = message.rid
+      joiningUser.roomType = meta.roomType
+      joiningUser.room = meta.roomName || message.rid
+      return this.robot.receive(new EnterMessage(joiningUser, null, message._id))
     }
 
     // Room exit, receive without further detail
-    if (['ul', 'ru'].includes(message.t)) {
-      this.robot.logger.debug('Message type LeaveMessage')
+    if ('ul' === message.t) {
       return this.robot.receive(new LeaveMessage(user, null, message._id))
+    }
+    if ('ru' === message.t) {
+      this.robot.logger.debug('Message type LeaveMessage', message)
+      const joiningUser = this.robot.brain.userForUsername(message.msg);
+      joiningUser.roomID = message.rid
+      joiningUser.roomType = meta.roomType
+      joiningUser.room = meta.roomName || message.rid
+      return this.robot.receive(new EnterMessage(joiningUser, null, message._id))
     }
 
     // Direct messages prepend bot's name so Hubot can `.respond`
