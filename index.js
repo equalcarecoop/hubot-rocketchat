@@ -99,13 +99,13 @@ class RocketChatBotAdapter extends Adapter {
     user.room = meta.roomName || message.rid
 
     // Room joins, receive without further detail
-    if (message.t === 'uj') {
+    if (['uj', 'au'].includes(message.t)) {
       this.robot.logger.debug('Message type EnterMessage')
       return this.robot.receive(new EnterMessage(user, null, message._id))
     }
 
     // Room exit, receive without further detail
-    if (message.t === 'ul') {
+    if (['ul', 'ru'].includes(message.t)) {
       this.robot.logger.debug('Message type LeaveMessage')
       return this.robot.receive(new LeaveMessage(user, null, message._id))
     }
