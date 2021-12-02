@@ -82,7 +82,7 @@ class RocketChatBotAdapter extends Adapter {
   }
 
   /** Process every incoming message in subscription */
-  process (err, message, meta) {
+  async process (err, message, meta) {
     if (err) throw err
     // Prepare message type for Hubot to receive...
     this.robot.logger.info('Filters passed, will receive message')
@@ -104,7 +104,7 @@ class RocketChatBotAdapter extends Adapter {
     }
     if ('au' === message.t) {
       this.robot.logger.debug('Message type EnterMessage', message)
-      const joiningUser = this.robot.brain.userForUsername(message.msg);
+      const joiningUser = await this.getUserByUsername(message.msg);
       joiningUser.roomID = message.rid
       joiningUser.roomType = meta.roomType
       joiningUser.room = meta.roomName || message.rid
@@ -117,11 +117,11 @@ class RocketChatBotAdapter extends Adapter {
     }
     if ('ru' === message.t) {
       this.robot.logger.debug('Message type LeaveMessage', message)
-      const joiningUser = this.robot.brain.userForUsername(message.msg);
+      const joiningUser = await this.getUserByUsername(message.msg);
       joiningUser.roomID = message.rid
       joiningUser.roomType = meta.roomType
       joiningUser.room = meta.roomName || message.rid
-      return this.robot.receive(new EnterMessage(joiningUser, null, message._id))
+      return this.robot.receive(new LeaveMessage(joiningUser, null, message._id))
     }
 
     // Direct messages prepend bot's name so Hubot can `.respond`
@@ -194,6 +194,12 @@ class RocketChatBotAdapter extends Adapter {
   /** Call a server message via driver */
   callMethod (method, ...args) {
     return driver.callMethod(method, args)
+  }
+
+  async getUserByUsername(username) {
+    const response = await this.api.get('users.info', { username })
+    if (!response.success) throw new Error('user info response unsucessful.')
+    return response.user;
   }
 }
 
