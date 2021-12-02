@@ -24,6 +24,10 @@
     {
       "name": "Tim Kinnane",
       "email": "tim.kinnane@rocket.chat"
+    },
+    {
+      "name": "Matt Williams",
+      "email": "matt@equalcare.coop"
     }
   ],
   "description": "Hubot Rocket.Chat Adapter",
@@ -37,11 +41,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/RocketChat/hubot-rocketchat.git"
+    "url": "https://github.com/equalcarecoop/hubot-rocketchat.git"
   },
   "bugs": {
-    "url": "https://github.com/RocketChat/hubot-rocketchat/issues",
-    "email": "support@rocket.chat"
+    "url": "https://github.com/equalcarecoop/hubot-rocketchat/issues",
+    "email": "platform@equalcare.coop"
   },
   "main": "index.js",
   "dependencies": {
