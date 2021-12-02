@@ -50,10 +50,7 @@
   "main": "index.js",
   "dependencies": {
     "@rocket.chat/sdk": "^0.2.1",
-    "hubot": "3"
-  },
-  "peerDependencies": {
-    "hubot": "3"
+    "hubot": "github:equalcarecoop/hubot"
   },
   "devDependencies": {
     "base64-url": "^2.0.0",
